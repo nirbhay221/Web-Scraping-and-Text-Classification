@@ -1,0 +1,31 @@
+import pandas as pd
+import requests
+import re
+import csv
+from bs4 import BeautifulSoup
+response = requests.get("https://www.indeed.co.in/jobs?q=data+science&l=India")
+soup = BeautifulSoup(response.content,"html.parser")
+df = pd.DataFrame(columns=["Title","Location","Company","Salary","Sponsored","Summary"])
+jobs = soup.find_all('div',attrs={'class':'result'})
+for job in jobs:
+	title = job.find('a',class_ ='jobtitle').text.strip()
+	location = job.find(class_ ='location').text.strip()
+	try:
+		Salary = job.find(class_ ='salary').text.strip()
+	except:
+		Salary = None
+		try:
+			Sponsored = job.find(class_ ='sponsored').text.strip()
+		except:
+			Sponsored = None
+	Company = job.find(class_ ='company').text.strip()
+
+	Summary = job.find(class_ ='summary').text.strip()
+
+
+
+	title = re.sub("b'\n","",title)
+	df = df.append({"Title":title,'Location': location,'Company':Company,'Salary':'Salary','Sponsored':'Sponsored','Summary':Summary} ,ignore_index = True)
+	df.to_csv("Revision",index =False)
+	print(title)
+	print(location)

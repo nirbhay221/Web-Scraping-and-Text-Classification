@@ -1,0 +1,19 @@
+import requests
+from bs4 import BeautifulSoup
+page = requests.get("https://www.codeheroku.com/blog.html")
+content = page.content
+soup = BeautifulSoup(content,'html.parser')
+
+data = []
+section = soup.find('section',attrs={'class':'card-group-2'})
+all_cards = section.find_all('div',attrs={'class':'card'})
+for card in all_cards:
+	blog ={}
+	title =card.find('h2',attrs={'class':'card-title'})
+	title = title.text.strip()
+	blog['title']= title
+	blog['date'] = card.find('p',attrs = {'class':'card-date'}).text.strip()
+	data.append(blog)
+	print(data)
+
+

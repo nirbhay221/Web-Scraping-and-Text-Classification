@@ -1,0 +1,24 @@
+import tweepy
+import csv
+consumer_key = "PxyhbPouWndiQX5UmlJe8NVWz"
+consumer_secret = "NzaL2thuffrGzknK0rCZArCi8wDowy31hLOsul5SKZIPiQBNP2"
+access_token = "1299270930439352320-FwTLnKWoGsi2WlWaRUa641uL88goK7"
+access_token_secret = "6QQVgWvwL3xeydzuwqFbsfd9iIRcdoklYV1oYJOdrHdHN"
+auth = tweepy.OAuthHandler(consumer_key,consumer_secret)
+auth.set_access_token(access_token,access_token_secret)
+api = tweepy.API(auth)
+api.verify_credentials()
+
+file_out = open("twitter.csv","w+",encoding="utf-8")
+writer = csv.writer(file_out)
+i=0
+writer.writerow(['created_at','screen_name','text'])
+for item in tweepy.Cursor(api.search,q = 'Coronavirus').items(100):
+	tweet=[]
+	print("Adding Item ",i,item.id)
+	i+=1
+
+	tweet.append(item.created_at)
+	tweet.append(item.user.screen_name)
+	tweet.append(item.text)
+	writer.writerow(tweet)

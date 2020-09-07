@@ -1,0 +1,12 @@
+import requests
+from bs4 import BeautifulSoup
+api_key = "439d4b804bc8187953eb36d2a8c26a02"
+base_url ="https://samples.openweathermap.org/data/2.5/weather"
+payload = {
+	'q' : 'London',
+	'appid':api_key
+}
+response = requests.get(base_url,params = payload)
+new_dict = response.json()
+
+print(new_dict["weather"][0]['description'])

@@ -1,0 +1,17 @@
+import requests
+from bs4 import BeautifulSoup
+payload = {
+	'email':'test123@codeheroku.com',
+	'password':'test123',
+	'_formname':'login'
+}
+session_request =requests.session()
+response= session_request.get("https://www.codeheroku.com/login")
+soup = BeautifulSoup(response.content,'html.parser')
+tag= soup.find('input',attrs={'name':'_formkey'})
+payload['_formkey'] = tag['value']
+result = session_request.post("https://www.codeheroku.com/login",data=payload)
+print(result.content)
+
+
+

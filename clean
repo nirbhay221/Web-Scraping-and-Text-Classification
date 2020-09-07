@@ -1,0 +1,25 @@
+import csv
+import pandas as pd 
+import numpy as np 
+import re
+import nltk
+from nltk import word_tokenize
+from nltk.corpus import stopwords
+df = pd.read_csv("twitter.csv",encoding= "utf-8")
+print(df.shape)
+def cleanData(item_text):
+	stop_words = stopwords.words("english")
+	clean_text= re.sub(r"RT\s@\w+","",item_text)
+	clean_text = re.sub(r"@\w+","",clean_text)
+	clean_text = re.sub(r"http\S+", "", clean_text)
+	word_list = word_tokenize(clean_text)
+	clean_list= []
+	for word in word_list:
+		if word.isalpha() and word not in stop_words:
+
+			clean_list.append(word)
+
+	return " ".join(clean_list)
+print(df.iloc[91]['text'])
+df['text'] = df['text'].apply(cleanData)
+print(df.iloc[91]['text'])
